@@ -25,8 +25,6 @@ type
     procedure TestSetNoisyMode;
 
     procedure TestMultipleLines;
-
-    procedure TestDebug;
   end;
 
 implementation
@@ -102,12 +100,6 @@ begin
   // Do not check the time
   MsgWarningInLogFormat:= Copy(Format(FORMAT_WARNING, [MsgWarning, DateTimeToStr(Now)]), 1, 33);
   CheckEquals(MsgWarningInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
-end;
-
-procedure TestTLogger.TestDebug;
-begin
-  FLogger.Debug('Debug');
-
 end;
 
 procedure TestTLogger.TestError;

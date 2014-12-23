@@ -54,7 +54,7 @@ end;
 procedure TLogger.Debug(const MsgDebug: string);
 begin
   if DebugHook <> 0 then
-    Self.Write(MsgDebug);
+    Self.Write('+ ' + MsgDebug);
 end;
 
 destructor TLogger.Destroy;
