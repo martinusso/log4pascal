@@ -1,3 +1,13 @@
+{*******************************************************}
+{                                                       }
+{                       Log4Pascal                      }
+{        https://github.com/martinusso/log4pascal       }
+{                                                       }
+{             This software is open source,             }
+{       licensed under the The MIT License (MIT).       }
+{                                                       }
+{*******************************************************}
+
 unit Log4Pascal;
 
 interface
