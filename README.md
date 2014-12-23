@@ -29,6 +29,15 @@ Logger.Warning('Warning message log');
 Logger.Debug('Message is logged only when in debug');
 ```
 
+### Output
+
+```txt
+Normal message log [DATETIME HERE]
+! Error message log  [DATETIME HERE]
+. Warning message log  [DATETIME HERE]
++ Message is logged only when in debug [DATETIME HERE]
+```
+
 ## License
 
 This software is open source, licensed under the The MIT License (MIT). See [LICENSE](https://github.com/martinusso/log4pascal/blob/master/LICENSE) for details.
