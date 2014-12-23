@@ -8,6 +8,15 @@ Log4Pascal is NOT based on the Log4J package from the Apache Software Foundation
 Just add the unit "src/Log4Pascal.pas" to project.
   - ``Project -> Add to Project`` and then locate and choose the file.
 
+### Log file
+
+The log file is defined in the unit Log4Pascal, so if you want to change, modify the following line:
+
+```delphi
+initialization
+  Logger := TLogger.Create('Log.txt');
+```
+
 ### Example
 
 ```delphi
