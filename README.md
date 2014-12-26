@@ -40,7 +40,7 @@ Logger.Error('Error message log');
 Logger.Fatal('Fatal message log');
 ```
 
-##### Output
+###### Output
 
 ```txt
 TRACE Trace message log [DATETIME HERE]
