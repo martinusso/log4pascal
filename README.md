@@ -20,25 +20,15 @@ initialization
 
 ### Features
 
-##### Disable Logging
-`SetQuietMode();`
-
-##### Enable Logging. By default, logging is enabled.
-`SetNoisyMode();`
-
-
-##### Enable or disable specific logs
-
-###### Enable
-
-`EnableTraceLog();` `EnableDebugLog();` `EnableInfoLog();` `EnableWarningLog();` `EnableErrorLog();` `EnableFatalLog();`
-
-###### Disable
-
-`DisableTraceLog();` `DisableDebugLog();` `DisableInfoLog();` `DisableWarningLog();` `DisableErrorLog();` `DisableFatalLog();`
-
-##### Clean up existing log files
-`Clear();`
+ - Disable Logging.
+  - `SetQuietMode();`
+ - Enable Logging. By default, logging is enabled.
+  - `SetNoisyMode();`
+ - Enable or disable specific logs
+  - `EnableTraceLog();` `EnableDebugLog();` `EnableInfoLog();` `EnableWarningLog();` `EnableErrorLog();` `EnableFatalLog();`
+  - `DisableTraceLog();` `DisableDebugLog();` `DisableInfoLog();` `DisableWarningLog();` `DisableErrorLog();` `DisableFatalLog();`
+ - Clean up existing log files
+  - `Clear();`
 
 ##### Logs
 
