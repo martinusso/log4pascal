@@ -29,10 +29,12 @@ type
     procedure SetNoisyMode();
     procedure Clear();
 
-    procedure Warning(const MsgWarning: string);
-    procedure Error(const MsgError: string);
+    procedure Trace(const Msg: string);
+    procedure Debug(const Msg: string);
     procedure Info(const Msg: string);
-    procedure Debug(const MsgDebug: string);
+    procedure Warning(const Msg: string);
+    procedure Error(const Msg: string);
+    procedure Fatal(const Msg: string);
   end;
  
 var
@@ -64,11 +66,11 @@ begin
   Self.SetNoisyMode();
 end;
  
-procedure TLogger.Debug(const MsgDebug: string);
+procedure TLogger.Debug(const Msg: string);
 begin
   {$WARN SYMBOL_PLATFORM OFF}
   if DebugHook <> 0 then
-    Self.Write('+ ' + MsgDebug);
+    Self.Write('+ ' + Msg);
   {$WARN SYMBOL_PLATFORM ON}
 end;
 
@@ -78,11 +80,16 @@ begin
   inherited;
 end;
  
-procedure TLogger.Error(const MsgError: string);
+procedure TLogger.Error(const Msg: string);
 begin
-  Self.Write('! ' + MsgError);
+  Self.Write('! ' + Msg);
 end;
- 
+
+procedure TLogger.Fatal(const Msg: string);
+begin
+  Self.Write('FATAL ' + Msg);
+end;
+
 procedure TLogger.Finalize;
 begin
   if (FIsInit and (not FQuietMode)) then
@@ -121,9 +128,14 @@ begin
   FQuietMode := True;
 end;
  
-procedure TLogger.Warning(const MsgWarning: string);
+procedure TLogger.Trace(const Msg: string);
 begin
-  Self.Write('. ' + MsgWarning);
+  Self.Write('TRACE ' + Msg);
+end;
+
+procedure TLogger.Warning(const Msg: string);
+begin
+  Self.Write('. ' + Msg);
 end;
  
 procedure TLogger.Write(const Msg: string);
