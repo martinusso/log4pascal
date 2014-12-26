@@ -13,20 +13,38 @@ unit Log4Pascal;
 interface
 
 type
+  TLogTypes = (ltTrace, ltDebug, ltInfo, ltWarning, ltError, ltFatal);
+  
   TLogger = class
   private
     FFileName: string;
     FIsInit: Boolean;
     FOutFile: TextFile;
     FQuietMode: Boolean;
+    FQuietTypes: set of TLogTypes;
     procedure Initialize();
     procedure Finalize();
     procedure Write(const Msg: string);
   public
     constructor Create(const FileName: string);
     destructor Destroy; override;
+
     procedure SetQuietMode();
+    procedure DisableTraceLog();
+    procedure DisableDebugLog();
+    procedure DisableInfoLog();
+    procedure DisableWarningLog();
+    procedure DisableErrorLog();
+    procedure DisableFatalLog();
+
     procedure SetNoisyMode();
+    procedure EnableTraceLog();
+    procedure EnableDebugLog();
+    procedure EnableInfoLog();
+    procedure EnableWarningLog();
+    procedure EnableErrorLog();
+    procedure EnableFatalLog();
+
     procedure Clear();
 
     procedure Trace(const Msg: string);
@@ -73,14 +91,17 @@ begin
   FFileName := FileName;
   FIsInit := False;
   Self.SetNoisyMode();
+  FQuietTypes := [];
 end;
  
 procedure TLogger.Debug(const Msg: string);
 begin
   {$WARN SYMBOL_PLATFORM OFF}
-  if DebugHook <> 0 then
-    Self.Write(Format(FORMAT_LOG, [PREFIX_DEBUG, Msg]));
+  if DebugHook = 0 then Exit;
   {$WARN SYMBOL_PLATFORM ON}
+
+  if not (ltDebug in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_DEBUG, Msg]));
 end;
 
 destructor TLogger.Destroy;
@@ -89,14 +110,76 @@ begin
   inherited;
 end;
  
+procedure TLogger.DisableDebugLog;
+begin
+  Include(FQuietTypes, ltDebug);
+end;
+
+procedure TLogger.DisableErrorLog;
+begin
+  Include(FQuietTypes, ltError);
+end;
+
+procedure TLogger.DisableFatalLog;
+begin
+  Include(FQuietTypes, ltFatal);
+end;
+
+procedure TLogger.DisableInfoLog;
+begin
+  Include(FQuietTypes, ltInfo);
+end;
+
+procedure TLogger.DisableTraceLog;
+begin
+  Include(FQuietTypes, ltTrace);
+end;
+
+procedure TLogger.DisableWarningLog;
+begin
+  Include(FQuietTypes, ltWarning);
+end;
+
+procedure TLogger.EnableDebugLog;
+begin
+  Exclude(FQuietTypes, ltDebug);
+end;
+
+procedure TLogger.EnableErrorLog;
+begin
+  Exclude(FQuietTypes, ltError);
+end;
+
+procedure TLogger.EnableFatalLog;
+begin
+  Exclude(FQuietTypes, ltFatal);
+end;
+
+procedure TLogger.EnableInfoLog;
+begin
+  Exclude(FQuietTypes, ltInfo);
+end;
+
+procedure TLogger.EnableTraceLog;
+begin
+  Exclude(FQuietTypes, ltTrace);
+end;
+
+procedure TLogger.EnableWarningLog;
+begin
+  Exclude(FQuietTypes, ltWarning);
+end;
+
 procedure TLogger.Error(const Msg: string);
 begin
-  Self.Write(Format(FORMAT_LOG, [PREFIX_ERROR, Msg]));
+  if not (ltError in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_ERROR, Msg]));
 end;
 
 procedure TLogger.Fatal(const Msg: string);
 begin
-  Self.Write(Format(FORMAT_LOG, [PREFIX_FATAL, Msg]));
+  if not (ltFatal in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_FATAL, Msg]));
 end;
 
 procedure TLogger.Finalize;
@@ -124,7 +207,8 @@ end;
  
 procedure TLogger.Info(const Msg: string);
 begin
-  Self.Write(Format(FORMAT_LOG, [PREFIX_INFO, Msg]));
+  if not (ltInfo in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_INFO, Msg]));
 end;
  
 procedure TLogger.SetNoisyMode;
@@ -139,12 +223,14 @@ end;
  
 procedure TLogger.Trace(const Msg: string);
 begin
-  Self.Write(Format(FORMAT_LOG, [PREFIX_TRACE, Msg]));
+  if not (ltTrace in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_TRACE, Msg]));
 end;
 
 procedure TLogger.Warning(const Msg: string);
 begin
-  Self.Write(Format(FORMAT_LOG, [PREFIX_WARN, Msg]));
+  if not (ltWarning in FQuietTypes) then
+    Self.Write(Format(FORMAT_LOG, [PREFIX_WARN, Msg]));
 end;
  
 procedure TLogger.Write(const Msg: string);

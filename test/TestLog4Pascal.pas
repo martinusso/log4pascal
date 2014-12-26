@@ -25,6 +25,12 @@ type
     procedure TestFatal;
 
     procedure TestSetQuietMode;
+    procedure TestTraceLogTurnedOnOff;
+    procedure TestInfoLogTurnedOnOff;
+    procedure TestWarningLogTurnedOnOff;
+    procedure TestErrorLogTurnedOnOff;
+    procedure TestFatalLogTurnedOnOff;
+
     procedure TestSetNoisyMode;
 
     procedure TestMultipleLines;
@@ -90,6 +96,22 @@ begin
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
+procedure TestTLogger.TestTraceLogTurnedOnOff;
+begin
+  FLogger.SetNoisyMode;
+  FLogger.Trace('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
+
+  FLogger.Clear;
+  FLogger.DisableTraceLog;
+  FLogger.Trace('any message');
+  CheckEquals('', Self.ReadFile().Text);
+
+  FLogger.EnableTraceLog();
+  FLogger.Trace('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'enabled trace log');
+end;
+
 procedure TestTLogger.TestSetNoisyMode;
 var
   Msg: string;
@@ -122,6 +144,22 @@ begin
   CheckEquals(MsgWarningInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
 end;
 
+procedure TestTLogger.TestWarningLogTurnedOnOff;
+begin
+  FLogger.SetNoisyMode;
+  FLogger.Warning('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
+
+  FLogger.Clear;
+  FLogger.DisableWarningLog;
+  FLogger.Warning('any message');
+  CheckEquals('', Self.ReadFile().Text, 'disabled warning log');
+
+  FLogger.EnableWarningLog;
+  FLogger.Warning('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'enabled warning log');
+end;
+
 procedure TestTLogger.TestClear;
 begin
   FLogger.Error('Error message');
@@ -146,6 +184,22 @@ begin
   CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
 end;
 
+procedure TestTLogger.TestErrorLogTurnedOnOff;
+begin
+  FLogger.SetNoisyMode;
+  FLogger.Error('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
+
+  FLogger.Clear;
+  FLogger.DisableErrorLog;
+  FLogger.Error('any message');
+  CheckEquals('', Self.ReadFile().Text, 'disabled error log');
+
+  FLogger.EnableErrorLog;
+  FLogger.Error('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'enabled error log');
+end;
+
 procedure TestTLogger.TestFatal;
 var
   MsgError: string;
@@ -159,6 +213,22 @@ begin
   CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
+procedure TestTLogger.TestFatalLogTurnedOnOff;
+begin
+  FLogger.SetNoisyMode;
+  FLogger.Fatal('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
+
+  FLogger.Clear;
+  FLogger.DisableFatalLog;
+  FLogger.Fatal('any message');
+  CheckEquals('', Self.ReadFile().Text, 'disabled fatal log');
+
+  FLogger.EnableFatalLog;
+  FLogger.Fatal('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'enabled fatal log');
+end;
+
 procedure TestTLogger.TestInfo;
 var
   Msg: string;
@@ -170,6 +240,22 @@ begin
   // Do not check the time
   MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 35);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
+end;
+
+procedure TestTLogger.TestInfoLogTurnedOnOff;
+begin
+  FLogger.SetNoisyMode;
+  FLogger.Info('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
+
+  FLogger.Clear;
+  FLogger.DisableInfoLog;
+  FLogger.Info('any message');
+  CheckEquals('', Self.ReadFile().Text);
+
+  FLogger.EnableInfoLog;
+  FLogger.Info('any message');
+  CheckNotEquals('', Self.ReadFile().Text, 'enabled info log');
 end;
 
 procedure TestTLogger.TestMultipleLines;
