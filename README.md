@@ -46,9 +46,9 @@ Logger.Fatal('Fatal message log');
 TRACE Trace message log [DATETIME HERE]
 DEBUG Message is logged only when in debug [DATETIME HERE]
 INFO  Normal message log [DATETIME HERE]
-WARN  Warning message log  [DATETIME HERE]
-ERROR Error message log  [DATETIME HERE]
-FATAL Fatal message log  [DATETIME HERE]
+WARN  Warning message log [DATETIME HERE]
+ERROR Error message log [DATETIME HERE]
+FATAL Fatal message log [DATETIME HERE]
 ```
 
 ## License
