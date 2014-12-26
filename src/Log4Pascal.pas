@@ -27,7 +27,8 @@ type
     destructor Destroy; override;
     procedure SetQuietMode();
     procedure SetNoisyMode();
- 
+    procedure Clear();
+
     procedure Warning(const MsgWarning: string);
     procedure Error(const MsgError: string);
     procedure Msg(const Msg: string);
@@ -40,10 +41,22 @@ var
 implementation
  
 uses
-  SysUtils;
+  SysUtils,
+  Windows;
  
 { TLogger }
  
+procedure TLogger.Clear;
+begin
+  if not FileExists(FFileName) then Exit;
+
+  if FIsInit then CloseFile(FOutFile);
+
+  SysUtils.DeleteFile(FFileName);
+
+  FIsInit := False;
+end;
+
 constructor TLogger.Create(const FileName: string);
 begin
   FFileName := FileName;
@@ -78,7 +91,7 @@ end;
 procedure TLogger.Initialize();
 begin
   if FIsInit then CloseFile(FOutFile);
- 
+
   if (not FQuietMode) then
   begin
     AssignFile(FOutFile, FFileName);
@@ -87,7 +100,7 @@ begin
     else
       Append(FOutFile);
   end;
- 
+
   FIsInit := True;
 end;
  
