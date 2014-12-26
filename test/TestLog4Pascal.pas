@@ -19,7 +19,7 @@ type
     function ReadFile: TStrings;
   published
     procedure TestError;
-    procedure TestMsg;
+    procedure TestInfo;
     procedure TestWarning;
     procedure TestSetQuietMode;
     procedure TestSetNoisyMode;
@@ -67,7 +67,7 @@ end;
 procedure TestTLogger.TestSetQuietMode;
 begin
   FLogger.SetQuietMode;
-  FLogger.Msg('any message');
+  FLogger.Info('any message');
 
   CheckEquals('', Self.ReadFile().Text);
 end;
@@ -78,13 +78,13 @@ var
   MsgInLogFormat: string;
 begin
   FLogger.SetQuietMode;
-  FLogger.Msg('any message');
+  FLogger.Info('any message');
 
   CheckEquals('', Self.ReadFile().Text);
 
   Msg := 'any noised message';
   FLogger.SetNoisyMode;
-  FLogger.Msg(Msg);
+  FLogger.Info(Msg);
 
   // Do not check the time
   MsgInLogFormat:= Copy(Format(FORMAT_NORMAL, [Msg, DateTimeToStr(Now)]), 1, 31);
@@ -108,7 +108,7 @@ procedure TestTLogger.TestClear;
 begin
   FLogger.Error('Error message');
   FLogger.Warning('Warning message');
-  FLogger.Msg('Normal message');
+  FLogger.Info('Normal message');
   CheckNotEquals('', Self.ReadFile().Text);
 
   FLogger.Clear();
@@ -128,13 +128,13 @@ begin
   CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
 end;
 
-procedure TestTLogger.TestMsg;
+procedure TestTLogger.TestInfo;
 var
   Msg: string;
   MsgInLogFormat: string;
 begin
-  Msg := 'Normal message test';
-  FLogger.Msg(Msg);
+  Msg := 'Info message test';
+  FLogger.Info(Msg);
 
   // Do not check the time
   MsgInLogFormat:= Copy(Format(FORMAT_NORMAL, [Msg, DateTimeToStr(Now)]), 1, 31);
@@ -147,10 +147,10 @@ var
   MsgInLogFormat: string;
 begin
   MsgLine1 := 'Line #1: Normal message test';
-  FLogger.Msg(MsgLine1);
+  FLogger.Info(MsgLine1);
 
   MsgLine2 := 'Line #2: Normal message test';
-  FLogger.Msg(MsgLine2);
+  FLogger.Info(MsgLine2);
 
   MsgInLogFormat:= Copy(Format(FORMAT_NORMAL, [MsgLine1, DateTimeToStr(Now)]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[0], 1, 31));
@@ -160,7 +160,7 @@ begin
 
 
   MsgLine3 := MsgLine2;
-  FLogger.Msg(MsgLine3);
+  FLogger.Info(MsgLine3);
 
   MsgInLogFormat:= Copy(Format(FORMAT_NORMAL, [MsgLine3, DateTimeToStr(Now)]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[2], 1, 31));

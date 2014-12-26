@@ -31,7 +31,7 @@ type
 
     procedure Warning(const MsgWarning: string);
     procedure Error(const MsgError: string);
-    procedure Msg(const Msg: string);
+    procedure Info(const Msg: string);
     procedure Debug(const MsgDebug: string);
   end;
  
@@ -106,7 +106,7 @@ begin
   FIsInit := True;
 end;
  
-procedure TLogger.Msg(const Msg: string);
+procedure TLogger.Info(const Msg: string);
 begin
   Self.Write(Msg);
 end;
