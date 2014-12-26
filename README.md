@@ -20,17 +20,13 @@ initialization
 
 ## Features
 
-### Enable or Disable Logging
-
-#### SetQuietMode();
+### SetQuietMode();
 Disable Logging.
 
-#### SetNoisyMode();
+### SetNoisyMode();
 Enable Logging. By default, logging is enabled.
 
-### Others
-
-#### Clear();
+### Clear();
 Clean up existing log files.
 
 ### Logs
