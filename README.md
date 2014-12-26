@@ -18,25 +18,41 @@ initialization
   Logger := TLogger.Create('Log.txt');
 ```
 
-### Example
+## Features
+
+### Enable or Disable Logging
+
+#### SetQuietMode();
+Disable Logging.
+
+#### SetNoisyMode();
+Enable Logging. By default, logging is enabled.
+
+### Others
+
+#### Clear();
+Clean up existing log files.
+
+### Logs
 
 ```delphi
-Logger.Msg('Normal message log');
-Logger.Error('Error message log');
-Logger.Warning('Warning message log');
-```
-
-```delphi
+Logger.Trace('Trace message log');
 Logger.Debug('Message is logged only when in debug');
+Logger.Info('Normal message log');
+Logger.Warning('Warning message log');
+Logger.Error('Error message log');
+Logger.Fatal('Fatal message log');
 ```
 
-### Output
+#### Output
 
 ```txt
-Normal message log [DATETIME HERE]
-! Error message log  [DATETIME HERE]
-. Warning message log  [DATETIME HERE]
-+ Message is logged only when in debug [DATETIME HERE]
+TRACE Trace message log [DATETIME HERE]
+DEBUG Message is logged only when in debug [DATETIME HERE]
+INFO  Normal message log [DATETIME HERE]
+WARN  Warning message log  [DATETIME HERE]
+ERROR Error message log  [DATETIME HERE]
+FATAL Fatal message log  [DATETIME HERE]
 ```
 
 ## License
