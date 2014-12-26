@@ -26,6 +26,16 @@ Disable Logging.
 ##### SetNoisyMode();
 Enable Logging. By default, logging is enabled.
 
+##### Enable or disable specific logs
+
+###### Enable
+
+EnableTraceLog(); EnableDebugLog(); EnableInfoLog(); EnableWarningLog(); EnableErrorLog(); EnableFatalLog();
+
+###### Disable
+
+DisableTraceLog(); DisableDebugLog(); DisableInfoLog(); DisableWarningLog(); DisableErrorLog(); DisableFatalLog();
+
 ##### Clear();
 Clean up existing log files.
 
