@@ -18,18 +18,18 @@ initialization
   Logger := TLogger.Create('Log.txt');
 ```
 
-## Features
+### Features
 
-### SetQuietMode();
+##### SetQuietMode();
 Disable Logging.
 
-### SetNoisyMode();
+##### SetNoisyMode();
 Enable Logging. By default, logging is enabled.
 
-### Clear();
+##### Clear();
 Clean up existing log files.
 
-### Logs
+##### Logs
 
 ```delphi
 Logger.Trace('Trace message log');
@@ -40,7 +40,7 @@ Logger.Error('Error message log');
 Logger.Fatal('Fatal message log');
 ```
 
-#### Output
+##### Output
 
 ```txt
 TRACE Trace message log [DATETIME HERE]
