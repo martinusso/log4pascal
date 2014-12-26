@@ -27,7 +27,7 @@ initialization
  - Enable or disable specific logs
   - `EnableTraceLog();` `EnableDebugLog();` `EnableInfoLog();` `EnableWarningLog();` `EnableErrorLog();` `EnableFatalLog();`
   - `DisableTraceLog();` `DisableDebugLog();` `DisableInfoLog();` `DisableWarningLog();` `DisableErrorLog();` `DisableFatalLog();`
- - Clean up existing log files
+ - Clean up existing log file
   - `Clear();`
 
 ##### Logs
