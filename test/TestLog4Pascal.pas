@@ -40,9 +40,9 @@ uses
 const
   FILE_LOG = 'test_log.txt';
   FORMAT_TRACE = 'TRACE %s [%s]';
-  FORMAT_INFO  = '%s [%s]';
-  FORMAT_WARN  = '. %s [%s]';
-  FORMAT_ERROR = '! %s [%s]';
+  FORMAT_INFO  = 'INFO  %s [%s]';
+  FORMAT_WARN  = 'WARN  %s [%s]';
+  FORMAT_ERROR = 'ERROR %s [%s]';
   FORMAT_FATAL = 'FATAL %s [%s]';
 
 function TestTLogger.ReadFile: TStrings;
@@ -86,8 +86,8 @@ begin
   FLogger.Trace(MsgTrace);
 
   // Do not check the time
-  MsgInLogFormat := Copy(Format(FORMAT_TRACE, [MsgTrace, DateTimeToStr(Now)]), 1, 36);
-  CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 36));
+  MsgInLogFormat := Copy(Format(FORMAT_TRACE, [MsgTrace, DateTimeToStr(Now)]), 1, 35);
+  CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
 procedure TestTLogger.TestSetNoisyMode;
@@ -155,8 +155,8 @@ begin
   FLogger.Fatal(MsgError);
 
   // Do not check the time
-  MsgErrorInLogFormat := Copy(Format(FORMAT_FATAL, [MsgError, DateTimeToStr(Now)]), 1, 36);
-  CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 36));
+  MsgErrorInLogFormat := Copy(Format(FORMAT_FATAL, [MsgError, DateTimeToStr(Now)]), 1, 35);
+  CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
 procedure TestTLogger.TestInfo;
@@ -168,8 +168,8 @@ begin
   FLogger.Info(Msg);
 
   // Do not check the time
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 31);
-  CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 31));
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 35);
+  CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
 procedure TestTLogger.TestMultipleLines;

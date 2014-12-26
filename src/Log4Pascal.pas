@@ -45,6 +45,15 @@ implementation
 uses
   SysUtils,
   Windows;
+
+const
+  FORMAT_LOG = '%s %s';
+  PREFIX_TRACE = 'TRACE';
+  PREFIX_DEBUG = 'DEBUG';
+  PREFIX_INFO  = 'INFO ';
+  PREFIX_WARN  = 'WARN ';
+  PREFIX_ERROR = 'ERROR';
+  PREFIX_FATAL = 'FATAL';
  
 { TLogger }
  
@@ -70,7 +79,7 @@ procedure TLogger.Debug(const Msg: string);
 begin
   {$WARN SYMBOL_PLATFORM OFF}
   if DebugHook <> 0 then
-    Self.Write('+ ' + Msg);
+    Self.Write(Format(FORMAT_LOG, [PREFIX_DEBUG, Msg]));
   {$WARN SYMBOL_PLATFORM ON}
 end;
 
@@ -82,12 +91,12 @@ end;
  
 procedure TLogger.Error(const Msg: string);
 begin
-  Self.Write('! ' + Msg);
+  Self.Write(Format(FORMAT_LOG, [PREFIX_ERROR, Msg]));
 end;
 
 procedure TLogger.Fatal(const Msg: string);
 begin
-  Self.Write('FATAL ' + Msg);
+  Self.Write(Format(FORMAT_LOG, [PREFIX_FATAL, Msg]));
 end;
 
 procedure TLogger.Finalize;
@@ -115,7 +124,7 @@ end;
  
 procedure TLogger.Info(const Msg: string);
 begin
-  Self.Write(Msg);
+  Self.Write(Format(FORMAT_LOG, [PREFIX_INFO, Msg]));
 end;
  
 procedure TLogger.SetNoisyMode;
@@ -130,12 +139,12 @@ end;
  
 procedure TLogger.Trace(const Msg: string);
 begin
-  Self.Write('TRACE ' + Msg);
+  Self.Write(Format(FORMAT_LOG, [PREFIX_TRACE, Msg]));
 end;
 
 procedure TLogger.Warning(const Msg: string);
 begin
-  Self.Write('. ' + Msg);
+  Self.Write(Format(FORMAT_LOG, [PREFIX_WARN, Msg]));
 end;
  
 procedure TLogger.Write(const Msg: string);
