@@ -30,11 +30,11 @@ Enable Logging. By default, logging is enabled.
 
 ###### Enable
 
-EnableTraceLog(); EnableDebugLog(); EnableInfoLog(); EnableWarningLog(); EnableErrorLog(); EnableFatalLog();
+`EnableTraceLog();` `EnableDebugLog();` `EnableInfoLog();` `EnableWarningLog();` `EnableErrorLog();` `EnableFatalLog();`
 
 ###### Disable
 
-DisableTraceLog(); DisableDebugLog(); DisableInfoLog(); DisableWarningLog(); DisableErrorLog(); DisableFatalLog();
+`DisableTraceLog();` `DisableDebugLog();` `DisableInfoLog();` `DisableWarningLog();` `DisableErrorLog();` `DisableFatalLog();`
 
 ##### Clear();
 Clean up existing log files.
