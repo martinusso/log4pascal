@@ -66,8 +66,10 @@ end;
  
 procedure TLogger.Debug(const MsgDebug: string);
 begin
+  {$WARN SYMBOL_PLATFORM OFF}
   if DebugHook <> 0 then
     Self.Write('+ ' + MsgDebug);
+  {$WARN SYMBOL_PLATFORM ON}
 end;
 
 destructor TLogger.Destroy;
