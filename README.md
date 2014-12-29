@@ -1,6 +1,6 @@
 # Log4Pascal
 
-Log4pascal is an Open Source project that aims to produce a simple logging suite for ObjectPascal (Delphi, FreePascal).
+Log4pascal is an Open Source project that aims to produce a simple logging unit for ObjectPascal (Delphi, FreePascal).
 
 Log4Pascal is NOT based on the Log4J package from the Apache Software Foundation. Well, just the name.
 
