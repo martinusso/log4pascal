@@ -10,8 +10,6 @@ type
   // Test methods for class TLogger
 
   TestTLogger = class(TTestCase)
-  strict private
-    FLogger: TLogger;
   public
     procedure SetUp; override;
     procedure TearDown; override;
@@ -44,7 +42,6 @@ uses
   Windows, SysUtils;
 
 const
-  FILE_LOG = 'test_log.txt';
   FORMAT_TRACE = 'TRACE %s [%s]';
   FORMAT_INFO  = 'INFO  %s [%s]';
   FORMAT_WARN  = 'WARN  %s [%s]';
@@ -56,29 +53,25 @@ begin
   Result := TStringList.Create;
   Result.Clear;
 
-  if not FileExists(FILE_LOG) then Exit;
+  if not FileExists(Logger.FileName) then Exit;
 
-  Result.LoadFromFile(FILE_LOG);
+  Result.LoadFromFile(Logger.FileName);
 end;
 
 procedure TestTLogger.SetUp;
 begin
-  FLogger := TLogger.Create(FILE_LOG);
-  Windows.DeleteFile(FILE_LOG);
+  SysUtils.DeleteFile(Logger.FileName);
 end;
 
 procedure TestTLogger.TearDown;
 begin
-  FLogger.Free;
-  FLogger := nil;
-
-  Windows.DeleteFile(FILE_LOG);
+  SysUtils.DeleteFile(Logger.FileName);
 end;
 
 procedure TestTLogger.TestSetQuietMode;
 begin
-  FLogger.SetQuietMode;
-  FLogger.Info('any message');
+  Logger.SetQuietMode;
+  Logger.Info('any message');
 
   CheckEquals('', Self.ReadFile().Text);
 end;
@@ -89,7 +82,7 @@ var
   MsgInLogFormat: string;
 begin
   MsgTrace := 'Trace message test';
-  FLogger.Trace(MsgTrace);
+  Logger.Trace(MsgTrace);
 
   // Do not check the time
   MsgInLogFormat := Copy(Format(FORMAT_TRACE, [MsgTrace, DateTimeToStr(Now)]), 1, 35);
@@ -98,17 +91,17 @@ end;
 
 procedure TestTLogger.TestTraceLogTurnedOnOff;
 begin
-  FLogger.SetNoisyMode;
-  FLogger.Trace('any message');
+  Logger.SetNoisyMode;
+  Logger.Trace('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
 
-  FLogger.Clear;
-  FLogger.DisableTraceLog;
-  FLogger.Trace('any message');
+  Logger.Clear;
+  Logger.DisableTraceLog;
+  Logger.Trace('any message');
   CheckEquals('', Self.ReadFile().Text);
 
-  FLogger.EnableTraceLog();
-  FLogger.Trace('any message');
+  Logger.EnableTraceLog();
+  Logger.Trace('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled trace log');
 end;
 
@@ -117,14 +110,14 @@ var
   Msg: string;
   MsgInLogFormat: string;
 begin
-  FLogger.SetQuietMode;
-  FLogger.Info('any message');
+  Logger.SetQuietMode;
+  Logger.Info('any message');
 
   CheckEquals('', Self.ReadFile().Text);
 
   Msg := 'any noised message';
-  FLogger.SetNoisyMode;
-  FLogger.Info(Msg);
+  Logger.SetNoisyMode;
+  Logger.Info(Msg);
 
   // Do not check the time
   MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 31);
@@ -137,7 +130,7 @@ var
   MsgWarningInLogFormat: string;
 begin
   MsgWarning := 'Warning message test';
-  FLogger.Warning(MsgWarning);
+  Logger.Warning(MsgWarning);
 
   // Do not check the time
   MsgWarningInLogFormat:= Copy(Format(FORMAT_WARN, [MsgWarning, DateTimeToStr(Now)]), 1, 33);
@@ -146,28 +139,28 @@ end;
 
 procedure TestTLogger.TestWarningLogTurnedOnOff;
 begin
-  FLogger.SetNoisyMode;
-  FLogger.Warning('any message');
+  Logger.SetNoisyMode;
+  Logger.Warning('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
 
-  FLogger.Clear;
-  FLogger.DisableWarningLog;
-  FLogger.Warning('any message');
+  Logger.Clear;
+  Logger.DisableWarningLog;
+  Logger.Warning('any message');
   CheckEquals('', Self.ReadFile().Text, 'disabled warning log');
 
-  FLogger.EnableWarningLog;
-  FLogger.Warning('any message');
+  Logger.EnableWarningLog;
+  Logger.Warning('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled warning log');
 end;
 
 procedure TestTLogger.TestClear;
 begin
-  FLogger.Error('Error message');
-  FLogger.Warning('Warning message');
-  FLogger.Info('Normal message');
+  Logger.Error('Error message');
+  Logger.Warning('Warning message');
+  Logger.Info('Normal message');
   CheckNotEquals('', Self.ReadFile().Text);
 
-  FLogger.Clear();
+  Logger.Clear();
   CheckEquals('', Self.ReadFile().Text);
 end;
 
@@ -177,7 +170,7 @@ var
   MsgErrorInLogFormat: string;
 begin
   MsgError := 'Error message test';
-  FLogger.Error(MsgError);
+  Logger.Error(MsgError);
 
   // Do not check the time
   MsgErrorInLogFormat := Copy(Format(FORMAT_ERROR, [MsgError, DateTimeToStr(Now)]), 1, 33);
@@ -186,17 +179,17 @@ end;
 
 procedure TestTLogger.TestErrorLogTurnedOnOff;
 begin
-  FLogger.SetNoisyMode;
-  FLogger.Error('any message');
+  Logger.SetNoisyMode;
+  Logger.Error('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
 
-  FLogger.Clear;
-  FLogger.DisableErrorLog;
-  FLogger.Error('any message');
+  Logger.Clear;
+  Logger.DisableErrorLog;
+  Logger.Error('any message');
   CheckEquals('', Self.ReadFile().Text, 'disabled error log');
 
-  FLogger.EnableErrorLog;
-  FLogger.Error('any message');
+  Logger.EnableErrorLog;
+  Logger.Error('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled error log');
 end;
 
@@ -206,7 +199,7 @@ var
   MsgErrorInLogFormat: string;
 begin
   MsgError := 'Fatal message test';
-  FLogger.Fatal(MsgError);
+  Logger.Fatal(MsgError);
 
   // Do not check the time
   MsgErrorInLogFormat := Copy(Format(FORMAT_FATAL, [MsgError, DateTimeToStr(Now)]), 1, 35);
@@ -215,17 +208,17 @@ end;
 
 procedure TestTLogger.TestFatalLogTurnedOnOff;
 begin
-  FLogger.SetNoisyMode;
-  FLogger.Fatal('any message');
+  Logger.SetNoisyMode;
+  Logger.Fatal('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
 
-  FLogger.Clear;
-  FLogger.DisableFatalLog;
-  FLogger.Fatal('any message');
+  Logger.Clear;
+  Logger.DisableFatalLog;
+  Logger.Fatal('any message');
   CheckEquals('', Self.ReadFile().Text, 'disabled fatal log');
 
-  FLogger.EnableFatalLog;
-  FLogger.Fatal('any message');
+  Logger.EnableFatalLog;
+  Logger.Fatal('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled fatal log');
 end;
 
@@ -235,7 +228,7 @@ var
   MsgInLogFormat: string;
 begin
   Msg := 'Info message test';
-  FLogger.Info(Msg);
+  Logger.Info(Msg);
 
   // Do not check the time
   MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 35);
@@ -244,17 +237,17 @@ end;
 
 procedure TestTLogger.TestInfoLogTurnedOnOff;
 begin
-  FLogger.SetNoisyMode;
-  FLogger.Info('any message');
+  Logger.SetNoisyMode;
+  Logger.Info('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'noisy mode');
 
-  FLogger.Clear;
-  FLogger.DisableInfoLog;
-  FLogger.Info('any message');
+  Logger.Clear;
+  Logger.DisableInfoLog;
+  Logger.Info('any message');
   CheckEquals('', Self.ReadFile().Text);
 
-  FLogger.EnableInfoLog;
-  FLogger.Info('any message');
+  Logger.EnableInfoLog;
+  Logger.Info('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled info log');
 end;
 
@@ -264,10 +257,10 @@ var
   MsgInLogFormat: string;
 begin
   MsgLine1 := 'Line #1: Normal message test';
-  FLogger.Info(MsgLine1);
+  Logger.Info(MsgLine1);
 
   MsgLine2 := 'Line #2: Normal message test';
-  FLogger.Info(MsgLine2);
+  Logger.Info(MsgLine2);
 
   MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine1, DateTimeToStr(Now)]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[0], 1, 31));
@@ -277,7 +270,7 @@ begin
 
 
   MsgLine3 := MsgLine2;
-  FLogger.Info(MsgLine3);
+  Logger.Info(MsgLine3);
 
   MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine3, DateTimeToStr(Now)]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[2], 1, 31));

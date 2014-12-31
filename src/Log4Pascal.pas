@@ -23,11 +23,14 @@ type
     FQuietMode: Boolean;
     FQuietTypes: set of TLogTypes;
     procedure Initialize();
+    procedure CreateFoldersIfNecessary();
     procedure Finalize();
     procedure Write(const Msg: string);
   public
     constructor Create(const FileName: string);
     destructor Destroy; override;
+
+    property FileName: string read FFileName;
 
     procedure SetQuietMode();
     procedure DisableTraceLog();
@@ -61,6 +64,7 @@ var
 implementation
  
 uses
+  Forms,
   SysUtils,
   Windows;
 
@@ -74,7 +78,8 @@ const
   PREFIX_FATAL = 'FATAL';
  
 { TLogger }
- 
+
+
 procedure TLogger.Clear;
 begin
   if not FileExists(FFileName) then Exit;
@@ -94,6 +99,23 @@ begin
   FQuietTypes := [];
 end;
  
+procedure TLogger.CreateFoldersIfNecessary;
+var
+  FilePath: string;
+  FullApplicationPath: string;
+begin
+  FilePath := ExtractFilePath(FFileName);
+
+  if Pos(':', FilePath) > 0 then
+  begin
+    ForceDirectories(FilePath);
+  end
+  else begin
+    FullApplicationPath := ExtractFilePath(Application.ExeName);
+    ForceDirectories(IncludeTrailingPathDelimiter(FullApplicationPath) + FilePath);
+  end;
+end;
+
 procedure TLogger.Debug(const Msg: string);
 begin
   {$WARN SYMBOL_PLATFORM OFF}
@@ -195,6 +217,7 @@ begin
 
   if (not FQuietMode) then
   begin
+    Self.CreateFoldersIfNecessary();
     AssignFile(FOutFile, FFileName);
     if not FileExists(FFileName) then
       Rewrite(FOutFile)
