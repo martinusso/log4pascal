@@ -79,12 +79,13 @@ const
  
 { TLogger }
 
-
 procedure TLogger.Clear;
 begin
-  if not FileExists(FFileName) then Exit;
+  if not FileExists(FFileName) then
+    Exit;
 
-  if FIsInit then CloseFile(FOutFile);
+  if FIsInit then
+    CloseFile(FOutFile);
 
   SysUtils.DeleteFile(FFileName);
 
@@ -119,7 +120,8 @@ end;
 procedure TLogger.Debug(const Msg: string);
 begin
   {$WARN SYMBOL_PLATFORM OFF}
-  if DebugHook = 0 then Exit;
+  if DebugHook = 0 then
+    Exit;
   {$WARN SYMBOL_PLATFORM ON}
 
   if not (ltDebug in FQuietTypes) then
@@ -208,16 +210,19 @@ procedure TLogger.Finalize;
 begin
   if (FIsInit and (not FQuietMode)) then
     CloseFile(FOutFile);
+
   FIsInit := False;
 end;
  
 procedure TLogger.Initialize();
 begin
-  if FIsInit then CloseFile(FOutFile);
+  if FIsInit then
+    CloseFile(FOutFile);
 
   if (not FQuietMode) then
   begin
     Self.CreateFoldersIfNecessary();
+    
     AssignFile(FOutFile, FFileName);
     if not FileExists(FFileName) then
       Rewrite(FOutFile)
