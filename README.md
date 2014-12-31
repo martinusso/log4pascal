@@ -52,6 +52,17 @@ ERROR Error message log [DATETIME HERE]
 FATAL Fatal message log [DATETIME HERE]
 ```
 
+## Known bugs
+
+### Free Pascal
+Using Lazarus (Free Pascal) there were 1 errors compiling module:
+`Identifier not found "DebugHook"`
+
+So if you want to use the Log4Pascal in Free Pascal, you must delete (or replace) the following line found in Log4Pascal unit:
+```Delphi
+if DebugHook = 0 then Exit;
+```
+
 ## License
 
 This software is open source, licensed under the The MIT License (MIT). See [LICENSE](https://github.com/martinusso/log4pascal/blob/master/LICENSE) for details.
