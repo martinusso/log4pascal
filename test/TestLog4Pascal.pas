@@ -35,8 +35,6 @@ type
     procedure TestMultipleLines;
 
     procedure TestClear;
-
-    procedure TestChangeFormatDateTime;
   end;
 
 implementation
@@ -52,6 +50,8 @@ const
   FORMAT_FATAL = 'FATAL %s [%s]';
 
 function TestTLogger.GetDateTime: string;
+const
+  FORMAT_DATETIME_DEFAULT = 'yyyy-mm-dd hh:nn:ss';
 begin
   Result := FormatDateTime(FORMAT_DATETIME_DEFAULT, Now);
 end;
@@ -159,25 +159,6 @@ begin
   Logger.EnableWarningLog;
   Logger.Warning('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled warning log');
-end;
-
-procedure TestTLogger.TestChangeFormatDateTime;
-const
-  MSG = 'any message';
-begin
-  Logger.Clear();
-  Logger.Info(MSG);
-  // INFO  any message [9999-99-99 99:99;99]
-  // = 39 chars
-  CheckEquals(39, Length(Trim(Self.ReadFile().Text)), 'check length');
-
-
-  Logger.Clear();
-  Logger.SetFormatDateTime('dd/mmm/yy');
-  Logger.Info(MSG);
-  // INFO  any message [99-aaa-99]
-  // = 29 chars
-  CheckEquals(29, Length(Trim(Self.ReadFile().Text)), 'check length');
 end;
 
 procedure TestTLogger.TestClear;
