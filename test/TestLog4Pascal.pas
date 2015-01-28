@@ -15,6 +15,7 @@ type
     procedure TearDown; override;
 
     function ReadFile: TStrings;
+    function GetDateTime: string;
   published
     procedure TestTrace;
     procedure TestInfo;
@@ -34,6 +35,8 @@ type
     procedure TestMultipleLines;
 
     procedure TestClear;
+
+    procedure TestChangeFormatDateTime;
   end;
 
 implementation
@@ -47,6 +50,11 @@ const
   FORMAT_WARN  = 'WARN  %s [%s]';
   FORMAT_ERROR = 'ERROR %s [%s]';
   FORMAT_FATAL = 'FATAL %s [%s]';
+
+function TestTLogger.GetDateTime: string;
+begin
+  Result := FormatDateTime(FORMAT_DATETIME_DEFAULT, Now);
+end;
 
 function TestTLogger.ReadFile: TStrings;
 begin
@@ -85,7 +93,7 @@ begin
   Logger.Trace(MsgTrace);
 
   // Do not check the time
-  MsgInLogFormat := Copy(Format(FORMAT_TRACE, [MsgTrace, DateTimeToStr(Now)]), 1, 35);
+  MsgInLogFormat := Copy(Format(FORMAT_TRACE, [MsgTrace, Self.GetDateTime()]), 1, 35);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
@@ -120,7 +128,7 @@ begin
   Logger.Info(Msg);
 
   // Do not check the time
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 31);
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, Self.GetDateTime()]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 31));
 end;
 
@@ -133,7 +141,7 @@ begin
   Logger.Warning(MsgWarning);
 
   // Do not check the time
-  MsgWarningInLogFormat:= Copy(Format(FORMAT_WARN, [MsgWarning, DateTimeToStr(Now)]), 1, 33);
+  MsgWarningInLogFormat:= Copy(Format(FORMAT_WARN, [MsgWarning, Self.GetDateTime()]), 1, 33);
   CheckEquals(MsgWarningInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
 end;
 
@@ -151,6 +159,25 @@ begin
   Logger.EnableWarningLog;
   Logger.Warning('any message');
   CheckNotEquals('', Self.ReadFile().Text, 'enabled warning log');
+end;
+
+procedure TestTLogger.TestChangeFormatDateTime;
+const
+  MSG = 'any message';
+begin
+  Logger.Clear();
+  Logger.Info(MSG);
+  // INFO  any message [9999-99-99 99:99;99]
+  // = 39 chars
+  CheckEquals(39, Length(Trim(Self.ReadFile().Text)), 'check length');
+
+
+  Logger.Clear();
+  Logger.SetFormatDateTime('dd/mmm/yy');
+  Logger.Info(MSG);
+  // INFO  any message [99-aaa-99]
+  // = 29 chars
+  CheckEquals(29, Length(Trim(Self.ReadFile().Text)), 'check length');
 end;
 
 procedure TestTLogger.TestClear;
@@ -173,7 +200,7 @@ begin
   Logger.Error(MsgError);
 
   // Do not check the time
-  MsgErrorInLogFormat := Copy(Format(FORMAT_ERROR, [MsgError, DateTimeToStr(Now)]), 1, 33);
+  MsgErrorInLogFormat := Copy(Format(FORMAT_ERROR, [MsgError, Self.GetDateTime()]), 1, 33);
   CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 33));
 end;
 
@@ -202,7 +229,7 @@ begin
   Logger.Fatal(MsgError);
 
   // Do not check the time
-  MsgErrorInLogFormat := Copy(Format(FORMAT_FATAL, [MsgError, DateTimeToStr(Now)]), 1, 35);
+  MsgErrorInLogFormat := Copy(Format(FORMAT_FATAL, [MsgError, Self.GetDateTime()]), 1, 35);
   CheckEquals(MsgErrorInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
@@ -231,7 +258,7 @@ begin
   Logger.Info(Msg);
 
   // Do not check the time
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, DateTimeToStr(Now)]), 1, 35);
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [Msg, Self.GetDateTime()]), 1, 35);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Text, 1, 35));
 end;
 
@@ -262,17 +289,17 @@ begin
   MsgLine2 := 'Line #2: Normal message test';
   Logger.Info(MsgLine2);
 
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine1, DateTimeToStr(Now)]), 1, 31);
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine1, Self.GetDateTime()]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[0], 1, 31));
 
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine2, DateTimeToStr(Now)]), 1, 31);
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine2, Self.GetDateTime()]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[1], 1, 31));
 
 
   MsgLine3 := MsgLine2;
   Logger.Info(MsgLine3);
 
-  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine3, DateTimeToStr(Now)]), 1, 31);
+  MsgInLogFormat:= Copy(Format(FORMAT_INFO, [MsgLine3, Self.GetDateTime()]), 1, 31);
   CheckEquals(MsgInLogFormat, Copy(Self.ReadFile().Strings[2], 1, 31));
 
 end;

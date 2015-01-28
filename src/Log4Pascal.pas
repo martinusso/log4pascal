@@ -14,9 +14,10 @@ interface
 
 type
   TLogTypes = (ltTrace, ltDebug, ltInfo, ltWarning, ltError, ltFatal);
-  
+
   TLogger = class
   private
+    FFormatDateTime: string;
     FFileName: string;
     FIsInit: Boolean;
     FOutFile: TextFile;
@@ -48,6 +49,8 @@ type
     procedure EnableErrorLog();
     procedure EnableFatalLog();
 
+    procedure SetFormatDateTime(const Format: string);
+
     procedure Clear();
 
     procedure Trace(const Msg: string);
@@ -57,12 +60,15 @@ type
     procedure Error(const Msg: string);
     procedure Fatal(const Msg: string);
   end;
- 
+
 var
   Logger: TLogger;
- 
+
+  const
+  FORMAT_DATETIME_DEFAULT = 'yyyy-mm-dd hh:nn:ss';
+
 implementation
- 
+
 uses
   Forms,
   SysUtils,
@@ -76,8 +82,13 @@ const
   PREFIX_WARN  = 'WARN ';
   PREFIX_ERROR = 'ERROR';
   PREFIX_FATAL = 'FATAL';
- 
+
 { TLogger }
+
+procedure TLogger.SetFormatDateTime(const Format: string);
+begin
+  FFormatDateTime := Format;
+end;
 
 procedure TLogger.Clear;
 begin
@@ -98,6 +109,7 @@ begin
   FIsInit := False;
   Self.SetNoisyMode();
   FQuietTypes := [];
+  FFormatDateTime := FORMAT_DATETIME_DEFAULT;
 end;
  
 procedure TLogger.CreateFoldersIfNecessary;
@@ -264,20 +276,20 @@ end;
 procedure TLogger.Write(const Msg: string);
 begin
   if FQuietMode then Exit;
- 
+
   Self.Initialize();
   try
     if FIsInit then
-      Writeln(FOutFile, Msg + Format(' [%s]', [DateTimeToStr(Now)]));
+      Writeln(FOutFile, Format('%s [%s]', [Msg, FormatDateTime(FFormatDateTime, Now)]));
   finally
     Self.Finalize();
   end;
 end;
- 
+
 initialization
   Logger := TLogger.Create('Log.txt');
- 
+
 finalization
   Logger.Free();
- 
+
 end.
