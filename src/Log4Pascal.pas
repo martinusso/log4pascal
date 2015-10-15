@@ -22,9 +22,9 @@ type
     FOutFile: TextFile;
     FQuietMode: Boolean;
     FQuietTypes: set of TLogTypes;
-    procedure Initialize();
-    procedure CreateFoldersIfNecessary();
-    procedure Finalize();
+    procedure Initialize;
+    procedure CreateFoldersIfNecessary;
+    procedure Finalize;
     procedure Write(const Msg: string);
   public
     constructor Create(const FileName: string);
@@ -32,23 +32,23 @@ type
 
     property FileName: string read FFileName;
 
-    procedure SetQuietMode();
-    procedure DisableTraceLog();
-    procedure DisableDebugLog();
-    procedure DisableInfoLog();
-    procedure DisableWarningLog();
-    procedure DisableErrorLog();
-    procedure DisableFatalLog();
+    procedure SetQuietMode;
+    procedure DisableTraceLog;
+    procedure DisableDebugLog;
+    procedure DisableInfoLog;
+    procedure DisableWarningLog;
+    procedure DisableErrorLog;
+    procedure DisableFatalLog;
 
-    procedure SetNoisyMode();
-    procedure EnableTraceLog();
-    procedure EnableDebugLog();
-    procedure EnableInfoLog();
-    procedure EnableWarningLog();
-    procedure EnableErrorLog();
-    procedure EnableFatalLog();
+    procedure SetNoisyMode;
+    procedure EnableTraceLog;
+    procedure EnableDebugLog;
+    procedure EnableInfoLog;
+    procedure EnableWarningLog;
+    procedure EnableErrorLog;
+    procedure EnableFatalLog;
 
-    procedure Clear();
+    procedure Clear;
 
     procedure Trace(const Msg: string);
     procedure Debug(const Msg: string);
@@ -96,7 +96,7 @@ constructor TLogger.Create(const FileName: string);
 begin
   FFileName := FileName;
   FIsInit := False;
-  Self.SetNoisyMode();
+  Self.SetNoisyMode;
   FQuietTypes := [];
 end;
  
@@ -108,9 +108,7 @@ begin
   FilePath := ExtractFilePath(FFileName);
 
   if Pos(':', FilePath) > 0 then
-  begin
-    ForceDirectories(FilePath);
-  end
+    ForceDirectories(FilePath)
   else begin
     FullApplicationPath := ExtractFilePath(Application.ExeName);
     ForceDirectories(IncludeTrailingPathDelimiter(FullApplicationPath) + FilePath);
@@ -130,7 +128,7 @@ end;
 
 destructor TLogger.Destroy;
 begin
-  Self.Finalize();
+  Self.Finalize;
   inherited;
 end;
  
@@ -214,14 +212,14 @@ begin
   FIsInit := False;
 end;
  
-procedure TLogger.Initialize();
+procedure TLogger.Initialize;
 begin
   if FIsInit then
     CloseFile(FOutFile);
 
-  if (not FQuietMode) then
+  if not FQuietMode then
   begin
-    Self.CreateFoldersIfNecessary();
+    Self.CreateFoldersIfNecessary;
     
     AssignFile(FOutFile, FFileName);
     if not FileExists(FFileName) then
@@ -244,7 +242,7 @@ begin
   FQuietMode := False;
 end;
  
-procedure TLogger.SetQuietMode();
+procedure TLogger.SetQuietMode;
 begin
   FQuietMode := True;
 end;
@@ -265,14 +263,15 @@ procedure TLogger.Write(const Msg: string);
 const
   FORMAT_DATETIME_DEFAULT = 'yyyy-mm-dd hh:nn:ss';
 begin
-  if FQuietMode then Exit;
+  if FQuietMode then
+    Exit;
 
-  Self.Initialize();
+  Self.Initialize;
   try
     if FIsInit then
       Writeln(FOutFile, Format('%s [%s]', [Msg, FormatDateTime(FORMAT_DATETIME_DEFAULT, Now)]));
   finally
-    Self.Finalize();
+    Self.Finalize;
   end;
 end;
 
@@ -280,6 +279,6 @@ initialization
   Logger := TLogger.Create('Log.txt');
 
 finalization
-  Logger.Free();
+  Logger.Free;
 
 end.
