@@ -6,7 +6,7 @@ Log4Pascal is NOT based on the Log4J package from the Apache Software Foundation
 
 ## How to use
 
-Just add the unit "Log4Pascal.pas" to project.
+Just add the unit `Log4Pascal.pas` to project.
   - ``Project -> Add to Project`` and then locate and choose the file.
 
 ### Log file
