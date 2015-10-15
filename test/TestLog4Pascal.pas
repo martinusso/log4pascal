@@ -3,8 +3,9 @@ unit TestLog4Pascal;
 interface
 
 uses
-  Classes,
-  TestFramework, Log4Pascal;
+  TestFramework,
+  Log4Pascal,
+  Classes;
 
 type
   // Test methods for class TLogger
@@ -288,4 +289,5 @@ end;
 initialization
   // Register any test cases with the test runner
   RegisterTest(TestTLogger.Suite);
+
 end.
